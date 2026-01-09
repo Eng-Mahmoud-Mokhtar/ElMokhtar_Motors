@@ -38,6 +38,8 @@ const services = [
 ];
 
 export function Tours() {
+  const waTourMessage = 'مرحبًا، أود طلب برنامج سياحي خاص. من فضلكم أرسلوا لي التفاصيل والأسعار.';
+  const waTourHref = `https://wa.me/201017900067?text=${encodeURIComponent(waTourMessage)}`;
   return (
     <section className="py-20 bg-[#0F0F0F]" id="tours">
       <div className="container mx-auto px-4">
@@ -120,9 +122,15 @@ export function Tours() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <button className="px-8 py-4 gradient-primary-to-brand text-[#0F0F0F] rounded-lg font-semibold hover:shadow-lg hover:shadow-[#C9A24D]/50 transition-all duration-300 transform hover:scale-105">
+          <a
+            href={waTourHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-8 py-4 gradient-primary-to-brand text-[#0F0F0F] rounded-lg font-semibold hover:shadow-lg hover:shadow-[#C9A24D]/50 transition-all duration-300 transform hover:scale-105"
+            aria-label="اطلب برنامج سياحي خاص"
+          >
             اطلب برنامج سياحي خاص
-          </button>
+          </a>
         </motion.div>
       </div>
     </section>

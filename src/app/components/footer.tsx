@@ -20,9 +20,9 @@ export function Footer() {
           </div>
 
           {/* Quick Links: right-aligned on mobile, centered on md+ */}
-          <div className="flex flex-col items-end md:items-center justify-self-center">
-            <h4 className="text-xl mb-4 text-white">روابط سريعة</h4>
-            <ul className="space-y-2 text-right w-full max-w-xs md:mx-auto">
+          <div className="flex flex-col items-end md:items-center justify-self-end md:justify-self-center w-full md:w-auto">
+            <h4 className="text-xl mb-4 text-white w-full text-right md:text-center md:w-auto">روابط سريعة</h4>
+            <ul className="space-y-2 text-right w-full md:mx-auto md:max-w-xs">
               <li>
                 <a href="#fleet" className="block w-full text-right text-[#888] hover:text-[#C9A24D] transition-colors">
                   أسطول السيارات

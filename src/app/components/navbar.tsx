@@ -9,11 +9,24 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
+      // While the mobile menu is open we ignore scroll events to avoid
+      // changing header state (keeps header stable/transparent while menu is open)
+      if (isOpen) return;
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Prevent body from scrolling while mobile menu is open to keep the UI stable
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    }
+    return () => {
+      if (typeof document !== "undefined") document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const navLinks = [
     { name: "الرئيسية", href: "#home" },
@@ -22,11 +35,30 @@ export function Navbar() {
     { name: "احجز الآن", href: "#contact" }
   ];
 
+  // showDrawerContent delays rendering heavy drawer content until the backdrop
+  // has had time to paint. This avoids the drawer rendering its contents before
+  // the backdrop appears which can cause a visual lag on slower devices.
+  const [showDrawerContent, setShowDrawerContent] = useState(false);
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout> | undefined;
+    if (isOpen) {
+      setShowDrawerContent(false);
+      // small delay so the backdrop paints first; tuned to 80ms
+      t = setTimeout(() => setShowDrawerContent(true), 80);
+    } else {
+      setShowDrawerContent(false);
+    }
+    return () => {
+      if (t) clearTimeout(t);
+    };
+  }, [isOpen]);
+
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-[#0F0F0F]/95 backdrop-blur-md shadow-lg" 
+        // Keep header transparent while menu is open; only use scrolled state when menu closed
+        isScrolled && !isOpen
+          ? "bg-[#0F0F0F]/100 backdrop-blur-md shadow-lg"
           : "bg-transparent"
       }`}
     >
@@ -74,10 +106,11 @@ export function Navbar() {
             </motion.a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button: keep visible above backdrop/drawer by increasing z-index */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white p-2"
+            className="md:hidden text-white p-2 relative z-[9999]"
+            aria-label={isOpen ? 'close menu' : 'open menu'}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -85,47 +118,61 @@ export function Navbar() {
 
         {/* Mobile Menu as right-side drawer */}
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="md:hidden fixed inset-0 z-50"
+          <div
+            className="md:hidden fixed inset-0 z-60"
           >
-            {/* backdrop */}
+            {/* semi-opaque backdrop so the page is dimmed while menu is open */}
             <div
-              className="absolute inset-0 bg-black/50"
+              // keep a transparent click-catcher so clicking outside closes the drawer,
+              // but don't darken the whole screen — the drawer itself is the visible panel.
+              className="absolute inset-0 bg-transparent z-50 transition-none"
               onClick={() => setIsOpen(false)}
             />
 
-            {/* drawer panel */}
+            {/* drawer panel: occupy ~1/4 of viewport width on small screens, include internal close button */}
             <motion.aside
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.25 }}
-              className="absolute top-0 bottom-0 right-0 w-72 bg-[#0F0F0F] p-6 shadow-2xl"
+              // small delay so backdrop can paint first on slower devices, avoids drawer-before-backdrop flash
+              transition={{ type: 'tween', duration: 0.18, delay: 0.04 }}
+              className="absolute top-0 bottom-0 right-0 w-[30%] md:w-1/4 min-w-[220px] bg-[#0F0F0F]/100 p-6 shadow-2xl z-70"
+              style={{ willChange: 'transform', transform: 'translateZ(0)' }}
             >
+              {/* internal close removed - use main toggle button or backdrop to close */}
               <div className="flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className="text-white hover:text-[#C9A24D] transition-colors font-medium"
-                  >
-                    {link.name}
-                  </a>
-                ))}
+                {showDrawerContent ? (
+                  <>
+                    {navLinks.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className="text-white hover:text-[#C9A24D] transition-colors font-medium"
+                      >
+                        {link.name}
+                      </a>
+                    ))}
 
-                <a
-                  href="tel:+201017900067"
-                  className="block w-full bg-brand-solid hover:bg-brand-solid-dark text-white py-3 rounded-lg text-center font-semibold transition-all duration-200"
-                >
-                  اتصل الآن
-                </a>
+                    <a
+                      href="tel:+201017900067"
+                      className="block w-full bg-brand-solid hover:bg-brand-solid-dark text-white py-2 rounded-md text-center font-semibold text-sm transition-all duration-200"
+                    >
+                      اتصل الآن
+                    </a>
+                  </>
+                ) : (
+                  // lightweight skeleton placeholders while backdrop paints
+                  <>
+                    <div className="h-4 bg-[#0A0A0A]/60 rounded w-3/4 animate-pulse" />
+                    <div className="h-4 bg-[#0A0A0A]/60 rounded w-2/3 animate-pulse" />
+                    <div className="h-4 bg-[#0A0A0A]/60 rounded w-1/2 animate-pulse" />
+                    <div className="h-10 bg-[#0A0A0A]/60 rounded w-full mt-4 animate-pulse" />
+                  </>
+                )}
               </div>
             </motion.aside>
-          </motion.div>
+          </div>
         )}
       </div>
     </nav>

@@ -74,7 +74,7 @@ export function HeroSection() {
           >
             <button
               onClick={() => scrollToSection("contact")}
-              className="group px-8 py-4 bg-brand-solid hover:bg-brand-solid-dark text-white rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-lg hover:shadow-xl"
+              className="group h-12 min-w-[220px] px-6 bg-brand-solid hover:bg-brand-solid-dark text-white rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
               aria-label="احجز سيارتك الآن"
             >
               <span className="font-semibold">احجز سيارتك الآن</span>
@@ -83,11 +83,11 @@ export function HeroSection() {
             
             <button
               onClick={() => scrollToSection("fleet")}
-              className="group px-8 py-4 bg-transparent border-2 border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#0F0F0F] rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
-              aria-label="شاهد الأسطول"
+              className="group h-12 min-w-[220px] px-6 bg-transparent border-2 border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#0F0F0F] rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+              aria-label="عرض السيارات"
             >
               <Play className="w-5 h-5" />
-              <span className="font-semibold">شاهد الأسطول</span>
+              <span className="font-semibold">عرض السيارات</span>
             </button>
           </motion.div>
         </div>
