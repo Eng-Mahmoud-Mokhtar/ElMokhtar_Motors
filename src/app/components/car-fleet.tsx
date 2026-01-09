@@ -119,8 +119,10 @@ function CarCard({ car }: { car: CarCardProps }) {
       }
     }
 
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage + locationPart)}`;
-    window.open(whatsappUrl, '_blank');
+  // Open chat directly with the official number and prefill the message
+  const officialNumber = "201017900067";
+  const whatsappUrl = `https://wa.me/${officialNumber}?text=${encodeURIComponent(whatsappMessage + locationPart)}`;
+  window.open(whatsappUrl, '_blank');
   };
 
   return (
