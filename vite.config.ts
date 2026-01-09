@@ -4,6 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  // Use relative base so GitHub Pages (or any subpath host) serves assets correctly
+  // This ensures built asset paths are relative and avoids the white page issue.
+  base: './',
   plugins: [
     // The React and Tailwind plugins are both required for Make, even if
     // Tailwind is not being actively used – do not remove them
