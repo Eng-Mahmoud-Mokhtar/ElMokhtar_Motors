@@ -2,14 +2,29 @@ import { motion } from "motion/react";
 import { MessageCircle } from "lucide-react";
 
 export function WhatsAppButton() {
-  const phoneNumber = "201234567890"; // WhatsApp number without + or spaces
-  const message = "مرحباً، أريد الاستفسار عن خدمات تأجير السيارات";
+  const phoneNumber = "201017900067"; // Updated WhatsApp number (country code + number, no +)
+  const baseMessage = "مرحباً، أريد الاستفسار عن خدمات تأجير السيارات";
 
-  const handleClick = () => {
-    window.open(
-      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
-      '_blank'
-    );
+  // Try to get user's current location (mobile) and append a Google Maps link to the message.
+  const handleClick = async () => {
+    let locationPart = "\nالموقع: القاهرة، مصر - شارع الهرم، الجيزة"; // fallback address
+
+    if (typeof navigator !== 'undefined' && 'geolocation' in navigator) {
+      try {
+        const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+          const timer = setTimeout(() => reject(new Error('timeout')), 3000);
+          navigator.geolocation.getCurrentPosition((p) => { clearTimeout(timer); resolve(p); }, (err) => { clearTimeout(timer); reject(err); }, { enableHighAccuracy: false, timeout: 3000 });
+        });
+        const { latitude, longitude } = pos.coords;
+        locationPart = `\nموقعي: https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+      } catch (e) {
+        // keep fallback locationPart
+      }
+    }
+
+    const message = `${baseMessage}${locationPart}`;
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
   };
 
   return (

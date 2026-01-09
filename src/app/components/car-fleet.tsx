@@ -95,20 +95,33 @@ const cars: CarCardProps[] = [
   
 ];
 
-const categories = [
-  { id: "all", label: "All" },
-  { id: "luxury", label: "Luxury Cars" },
-  { id: "economic", label: "Economic Cars" },
-  { id: "family", label: "Family Cars" },
-  { id: "suv", label: "SUV" },
-  { id: "vip", label: "VIP Cars" }
-];
+// No categories UI: always show all cars
 
 function CarCard({ car }: { car: CarCardProps }) {
   const [hovered, setHovered] = useState(false);
 
   const whatsappMessage = `طلب حجز: ${car.name} - موديل ${car.model} - السعر ${car.price} EGP/Day`;
-  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`;
+
+  // On mobile we try to include the user's location if available, otherwise just open WhatsApp with the car details.
+  const handleWhatsApp = async () => {
+    let locationPart = "\nالموقع: القاهرة، مصر - شارع الهرم، الجيزة"; // fallback
+
+    if (typeof navigator !== 'undefined' && 'geolocation' in navigator) {
+      try {
+        const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+          const timer = setTimeout(() => reject(new Error('timeout')), 3000);
+          navigator.geolocation.getCurrentPosition((p) => { clearTimeout(timer); resolve(p); }, (err) => { clearTimeout(timer); reject(err); }, { enableHighAccuracy: false, timeout: 3000 });
+        });
+        const { latitude, longitude } = pos.coords;
+        locationPart = `\nموقعي: https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+      } catch (e) {
+        // ignore and use fallback
+      }
+    }
+
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage + locationPart)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
     <motion.div
@@ -149,27 +162,21 @@ function CarCard({ car }: { car: CarCardProps }) {
           </div>
         </div>
 
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          onClick={() => { void handleWhatsApp(); }}
           aria-label={`WhatsApp booking for ${car.name}`}
           className={`w-full block bg-brand-solid hover:bg-brand-solid-dark text-white py-2 rounded-lg transition-all duration-200 text-center font-semibold`}
         >
           احجز الآن
-        </a>
+        </button>
       </div>
     </motion.div>
   );
 }
 
 export function CarFleet() {
-  const [activeCategory, setActiveCategory] = useState("all");
-
-  const filteredCars =
-    activeCategory === "all"
-      ? cars
-      : cars.filter(car => car.category === activeCategory);
+  // Always show all cars; no filtering UI
+  const filteredCars = cars;
 
   return (
     <section className="py-20 bg-[#0F0F0F]" id="fleet">
@@ -182,29 +189,14 @@ export function CarFleet() {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl mb-4 text-white">
-            Car Fleet
+            أسطول السيارات
           </h2>
           <p className="text-[#888] text-lg">
-            Choose your perfect car from our luxury fleet
+            اختر سيارتك المثالية من أسطولنا الفاخر
           </p>
         </motion.div>
 
-        {/* Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-6 py-3 rounded-lg transition-all duration-300 font-semibold ${
-                activeCategory === category.id
-                  ? "bg-[#C9A24D] text-[#0F0F0F]"
-                  : "bg-[#1C1C1C] text-[#888] hover:bg-[#C9A24D]/20 hover:text-[#C9A24D]"
-              }`}
-            >
-              {category.label}
-            </button>
-          ))}
-        </div>
+        {/* Categories removed — always showing all cars */}
 
         {/* Cars Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

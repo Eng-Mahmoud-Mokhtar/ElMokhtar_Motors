@@ -36,14 +36,15 @@ export function Navbar() {
           <motion.div
             initial={{ opacity: 0, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
-            className="absolute right-4 top-0 bottom-0 flex items-center z-50"
+            // reduce logo size on mobile and lower z-index so mobile menu overlays it
+            className="flex items-center z-20"
           >
             <img
               src={logoImg}
               alt="شعار المختار"
-              className="w-24 h-24 md:w-32 md:h-32 mb-0 md:mb-0 md:mr-0"
+              className="w-16 h-16 md:w-32 md:h-32 mb-0 md:mb-0 md:mr-0"
             />
-            <h1 className="text-lg md:text-2xl text-[#C9A24D] ml-0 md:-ml-1" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h1 className="text-lg md:text-2xl text-[#C9A24D] mr-2 md:mr-0">
               المختار موتورز
             </h1>
           </motion.div>
@@ -63,7 +64,7 @@ export function Navbar() {
               </motion.a>
             ))}
             <motion.a
-              href="tel:+201234567890"
+              href="tel:+201017900067"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
@@ -89,7 +90,8 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden pb-4"
+            // ensure mobile menu sits above the logo and other elements
+            className="md:hidden pb-4 z-50 relative"
           >
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
@@ -103,7 +105,7 @@ export function Navbar() {
                 </a>
               ))}
               <a
-                href="tel:+201234567890"
+                href="tel:+201017900067"
                 className="flex items-center justify-center gap-2 bg-brand-solid hover:bg-brand-solid-dark text-white px-6 py-2 rounded-lg transition-all duration-300 w-full"
               >
                 <Phone className="w-4 h-4" />
