@@ -24,27 +24,27 @@ export function Footer() {
             <h4 className="text-xl mb-4 text-white">روابط سريعة</h4>
             <ul className="space-y-2 text-right w-full max-w-xs md:mx-auto">
               <li>
-                <a href="#fleet" className="text-[#888] hover:text-[#C9A24D] transition-colors">
+                <a href="#fleet" className="block w-full text-right text-[#888] hover:text-[#C9A24D] transition-colors">
                   أسطول السيارات
                 </a>
               </li>
               <li>
-                <a href="#tours" className="text-[#888] hover:text-[#C9A24D] transition-colors">
+                <a href="#tours" className="block w-full text-right text-[#888] hover:text-[#C9A24D] transition-colors">
                   الرحلات السياحية
                 </a>
               </li>
               <li>
-                <a href="#contact" className="text-[#888] hover:text-[#C9A24D] transition-colors">
+                <a href="#contact" className="block w-full text-right text-[#888] hover:text-[#C9A24D] transition-colors">
                   احجز الآن
                 </a>
               </li>
               <li>
-                <a href="#" className="text-[#888] hover:text-[#C9A24D] transition-colors">
+                <a href="#" className="block w-full text-right text-[#888] hover:text-[#C9A24D] transition-colors">
                   من نحن
                 </a>
               </li>
               <li>
-                <a href="#" className="text-[#888] hover:text-[#C9A24D] transition-colors">
+                <a href="#" className="block w-full text-right text-[#888] hover:text-[#C9A24D] transition-colors">
                   الشروط والأحكام
                 </a>
               </li>
