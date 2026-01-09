@@ -83,34 +83,48 @@ export function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu as right-side drawer */}
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            // ensure mobile menu sits above the logo and other elements
-            className="md:hidden pb-4 z-50 relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="md:hidden fixed inset-0 z-50"
           >
-            <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
+            {/* backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50"
+              onClick={() => setIsOpen(false)}
+            />
+
+            {/* drawer panel */}
+            <motion.aside
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.25 }}
+              className="absolute top-0 bottom-0 right-0 w-72 bg-[#0F0F0F] p-6 shadow-2xl"
+            >
+              <div className="flex flex-col gap-4">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-white hover:text-[#C9A24D] transition-colors font-medium"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+
                 <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-white hover:text-[#C9A24D] transition-colors font-medium"
+                  href="tel:+201017900067"
+                  className="block w-full bg-brand-solid hover:bg-brand-solid-dark text-white py-3 rounded-lg text-center font-semibold transition-all duration-200"
                 >
-                  {link.name}
+                  اتصل الآن
                 </a>
-              ))}
-              <a
-                href="tel:+201017900067"
-                className="flex items-center justify-center gap-2 bg-brand-solid hover:bg-brand-solid-dark text-white px-6 py-2 rounded-lg transition-all duration-300 w-full"
-              >
-                <Phone className="w-4 h-4" />
-                <span className="font-semibold">اتصل الآن</span>
-              </a>
-            </div>
+              </div>
+            </motion.aside>
           </motion.div>
         )}
       </div>
