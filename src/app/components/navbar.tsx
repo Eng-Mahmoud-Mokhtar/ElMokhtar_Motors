@@ -65,13 +65,12 @@ export function Navbar() {
             ))}
             <motion.a
               href="tel:+201017900067"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="flex items-center gap-2 bg-brand-solid hover:bg-brand-solid-dark text-white px-6 py-2 rounded-lg transition-all duration-300 transform hover:scale-105"
+              className="text-white hover:text-[#C9A24D] transition-colors font-medium"
             >
-              <Phone className="w-4 h-4" />
-              <span className="font-semibold">اتصل الآن</span>
+              اتصل الآن
             </motion.a>
           </div>
 
