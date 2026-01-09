@@ -19,10 +19,10 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Quick Links (centered) */}
-          <div className="flex flex-col items-center justify-self-center">
+          {/* Quick Links: right-aligned on mobile, centered on md+ */}
+          <div className="flex flex-col items-end md:items-center justify-self-center">
             <h4 className="text-xl mb-4 text-white">روابط سريعة</h4>
-            <ul className="space-y-2 text-right w-full max-w-xs mx-auto">
+            <ul className="space-y-2 text-right w-full max-w-xs md:mx-auto">
               <li>
                 <a href="#fleet" className="text-[#888] hover:text-[#C9A24D] transition-colors">
                   أسطول السيارات
@@ -78,7 +78,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-[#C9A24D]/20 pt-8 text-center space-y-2">
+        <div className="border-t border-[#C9A24D]/20 pt-8 text-right space-y-2 md:text-center">
           <p className="text-[#888]">
             © {currentYear} المختار موتورز. جميع الحقوق محفوظة.
           </p>
