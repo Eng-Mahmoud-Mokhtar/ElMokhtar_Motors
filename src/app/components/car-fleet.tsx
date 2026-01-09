@@ -102,27 +102,11 @@ function CarCard({ car }: { car: CarCardProps }) {
 
   const whatsappMessage = `طلب حجز: ${car.name} - موديل ${car.model} - السعر ${car.price} EGP/Day`;
 
-  // On mobile we try to include the user's location if available, otherwise just open WhatsApp with the car details.
-  const handleWhatsApp = async () => {
-    let locationPart = "\nالموقع: القاهرة، مصر - شارع الهرم، الجيزة"; // fallback
-
-    if (typeof navigator !== 'undefined' && 'geolocation' in navigator) {
-      try {
-        const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-          const timer = setTimeout(() => reject(new Error('timeout')), 3000);
-          navigator.geolocation.getCurrentPosition((p) => { clearTimeout(timer); resolve(p); }, (err) => { clearTimeout(timer); reject(err); }, { enableHighAccuracy: false, timeout: 3000 });
-        });
-        const { latitude, longitude } = pos.coords;
-        locationPart = `\nموقعي: https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-      } catch (e) {
-        // ignore and use fallback
-      }
-    }
-
-  // Open chat directly with the official number and prefill the message
-  const officialNumber = "201017900067";
-  const whatsappUrl = `https://wa.me/${officialNumber}?text=${encodeURIComponent(whatsappMessage + locationPart)}`;
-  window.open(whatsappUrl, '_blank');
+    // Open WhatsApp chat with official number and only the car details (no location)
+    const handleWhatsApp = () => {
+      const officialNumber = "201017900067";
+      const whatsappUrl = `https://wa.me/${officialNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(whatsappUrl, '_blank');
   };
 
   return (
